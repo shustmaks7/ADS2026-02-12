@@ -41,11 +41,20 @@ public class C_Stairs {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
+        if (n == 0) return 0;
+        if (n == 1) return stairs[0];
 
+        int[] dp = new int[n];
+        dp[0] = stairs[0];
+        // На вторую ступеньку можно прыгнуть с первой (dp[0]) или сразу с земли (0)
+        dp[1] = Math.max(0, dp[0]) + stairs[1];
 
+        // Для остальных ступенек выбираем максимальный из двух возможных прыжков
+        for (int i = 2; i < n; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2]) + stairs[i];
+        }
 
-
+        int result = dp[n - 1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
