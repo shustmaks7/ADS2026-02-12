@@ -56,9 +56,50 @@ public class C_LongNotUpSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
+        int[] tail = new int[n + 1]; // Хранит индексы элементов
+        int[] prev = new int[n];     // Для восстановления пути
+        int len = 0;
 
+        for (int i = 0; i < n; i++) {
+            int low = 1, high = len, k = 0;
+            // Бинарный поиск
+            while (low <= high) {
+                int mid = low + (high - low) / 2;
+                if (m[tail[mid]] >= m[i]) {
+                    k = mid;
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
 
+            prev[i] = (k > 0) ? tail[k] : -1;
+
+            int newLen = k + 1;
+            tail[newLen] = i;
+
+            if (newLen > len) {
+                len = newLen;
+            }
+        }
+
+        // Восстанавливаем индексы с конца
+        int[] ans = new int[len];
+        int curr = tail[len];
+        for (int i = len - 1; i >= 0; i--) {
+            ans[i] = curr + 1; // +1, т.к. индексы в ответе с 1, а не с 0
+            curr = prev[curr];
+        }
+
+        // Вывод согласно условиям: сначала длина, потом индексы
+        System.out.println(len);
+        for (int i = 0; i < len; i++) {
+            System.out.print(ans[i] + (i == len - 1 ? "" : " "));
+        }
+        System.out.println();
+
+        // Возвращаем длину.
+        int result = len;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

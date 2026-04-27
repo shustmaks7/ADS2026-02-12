@@ -51,6 +51,20 @@ public class A_LIS {
             m[i] = scanner.nextInt();
         }
         int result = 0;
+        int[] dp = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1; // Минимальная длина равна 1 (сам элемент)
+            for (int j = 0; j < i; j++) {
+                // Если элемент возрастает и найденный путь длиннее текущего
+                if (m[i] > m[j] && dp[j] + 1 > dp[i]) {
+                    dp[i] = dp[j] + 1;
+                }
+            }
+            if (dp[i] > result) {
+                result = dp[i];
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
