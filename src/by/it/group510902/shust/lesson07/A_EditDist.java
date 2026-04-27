@@ -2,6 +2,7 @@ package by.it.group510902.shust.lesson07;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -38,14 +39,36 @@ import java.util.Scanner;
 
 public class A_EditDist {
 
+    private int[][] memo;
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+// Инициализируем таблицу мемоизации значениями -1
+        memo = new int[one.length() + 1][two.length() + 1];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        return solve(one, two, one.length(), two.length());
+    }
 
+    private int solve(String s1, String s2, int i, int j) {
+        // Базовые случаи: если одна из строк пустая, возвращаем длину второй
+        if (i == 0) return j;
+        if (j == 0) return i;
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        // Если значение уже вычислено, берем его из кэша
+        if (memo[i][j] != -1) return memo[i][j];
+
+        // Стоимость замены (0, если символы равны, 1, если отличаются)
+        int cost = (s1.charAt(i - 1) == s2.charAt(j - 1)) ? 0 : 1;
+
+        // Рекурсивно находим минимум из трех операций: удаление, вставка, замена/совпадение
+        memo[i][j] = Math.min(
+                Math.min(solve(s1, s2, i - 1, j) + 1, solve(s1, s2, i, j - 1) + 1),
+                solve(s1, s2, i - 1, j - 1) + cost
+        );
+
+        return memo[i][j];
     }
 
 
